@@ -1,0 +1,19 @@
+### Variáveis de ambiente
+@base_url = http://127.0.0.1:8000
+
+### 
+POST {{base_url}}/usuario
+Content-Type: application/json
+
+{
+  "id": 0,
+  "nome": "davi",
+  "cpf": "98765432102",
+  "data_nascimento": "2026-03-17",
+  "email": "rik2@gamil.com",
+  "usuario": "rickza2",
+  "senha": "2345678"
+}
+
+POST {{base_url}}/usuario
+Content-Type: application/json

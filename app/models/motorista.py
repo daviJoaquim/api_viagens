@@ -1,10 +1,10 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, DECIMAL
 from app.database import Base
 
 class MotoristaModel(Base):
-    __tablename__ = "motoristas"
+    __tablename__ = "motorista"
 
-    id = Column(Integer, primary_key=True)
+    id_motorista = Column(Integer, primary_key=True)
     id_usuario = Column(Integer, ForeignKey("usuarios.id"))
-    media_avaliacao = Column(Float)
+    media_avaliacao = Column(DECIMAL(3,2))
     cnh = Column(String(20))
