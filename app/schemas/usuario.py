@@ -2,7 +2,6 @@ from pydantic import BaseModel
 from datetime import date
 
 class UsuarioSchema(BaseModel):
-    id: int
     nome: str
     cpf: str
     data_nascimento: date

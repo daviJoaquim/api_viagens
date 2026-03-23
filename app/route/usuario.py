@@ -44,12 +44,12 @@ async def atualizar_usuarios(id: int, dados: UsuarioCreate, db: Session = Depend
 
    return usuario
 
-@viagens.delete("{id}")
+@viagens.delete("/{id}")
 async def deletar_series(id: int, db:Session= Depends(get_db)):
     
     usuario = db.query(UsuarioModel).filter(UsuarioModel.id == id).first()
 
-    if not id:
+    if not usuario:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
             detail=f"O usuário com ID {id} não foi encontrada"
