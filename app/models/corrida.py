@@ -1,5 +1,5 @@
 from sqlalchemy import DECIMAL, Column, Integer, DateTime, ForeignKey, String
-from database import Base
+from app.database import Base
 
 class CorridaModel(Base):
     __tablename__ = "corrida"

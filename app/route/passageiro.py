@@ -28,7 +28,7 @@ def buscar(id: int, db: Session = Depends(get_db)):
 
 @viagens.put("/{id}", response_model=PassageiroResponse)
 async def atualizar_passageiro(id: int, dados: PassageiroSchema, db: Session = Depends(get_db)):
-   passageiro = db.query(PassageiroModel).filter(PassageiroModel.id == id).first()
+   passageiro = db.query(PassageiroModel).filter(PassageiroModel.id_passageiro == id).first()
 
    if not passageiro: 
        raise HTTPException(
@@ -46,7 +46,7 @@ async def atualizar_passageiro(id: int, dados: PassageiroSchema, db: Session = D
 
 @viagens.delete("/{id}")
 async def deletar_passageiro(id: int, db:Session= Depends(get_db)):
-    passageiro = db.query(PassageiroModel).filter(PassageiroModel.id == id).first()
+    passageiro = db.query(PassageiroModel).filter(PassageiroModel.id_passageiro == id).first()
 
     if not passageiro:
         raise HTTPException(

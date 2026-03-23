@@ -6,6 +6,6 @@ class VeiculoModel(Base):
 
     id_veiculo = Column(Integer, primary_key=True, autoincrement=True)
     placa = Column (String(7))
-    id_modelo = Column(Integer, ForeignKey("modelo.id_modelo_veiculo"))
+    id_modelo_veiculo = Column(Integer, ForeignKey("modelo_veiculo.id_modelo_veiculo"))
     tem_seguro = Column(Integer)
-    id_classe_veiculo = Column(Integer, ForeignKey("classe_veiculo.id_classe_veiculo"))
+    id_classe = Column(Integer, ForeignKey("classe.id_classe"))

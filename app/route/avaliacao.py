@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status 
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.avaliacao import AvaliacaoModel
@@ -28,12 +28,12 @@ def buscar(id: int, db: Session = Depends(get_db)):
 
 @viagens.put("/{id}", response_model=AvaliacaoResponse)
 async def atualizar_avaliacao(id: int, dados: AvaliacaoSchema, db: Session = Depends(get_db)):
-   avaliacao = db.query(AvaliacaoModel).filter(AvaliacaoModel.id == id).first()
+   avaliacao = db.query(AvaliacaoModel).filter(AvaliacaoModel.id_avaliacao == id).first()
 
    if not avaliacao: 
        raise HTTPException(
             status_code = status.HTTP_404_NOT_FOUND,
-            detail = f"Avaliacão com ID {id} não encontrada"
+            detail = f"Avaliação com ID {id} não encontrada"
         )
    
    for campo, valor in dados.model_dump().items():
@@ -46,12 +46,12 @@ async def atualizar_avaliacao(id: int, dados: AvaliacaoSchema, db: Session = Dep
 
 @viagens.delete("/{id}")
 async def deletar_avaliacao(id: int, db:Session= Depends(get_db)):
-    avaliacao = db.query(AvaliacaoModel).filter(AvaliacaoModel.id == id).first()
+    avaliacao = db.query(AvaliacaoModel).filter(AvaliacaoModel.id_avaliacao == id).first()
 
     if not avaliacao:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
-            detail=f"O avaliacão com ID {id} não foi encontrada"
+            detail=f"O avaliação com ID {id} não foi encontrada"
         )
 
         

@@ -28,7 +28,7 @@ def buscar(id: int, db: Session = Depends(get_db)):
 
 @viagens.put("/{id}", response_model=PagamentoResponse)
 async def atualizar_pagamento(id: int, dados: PagamentoSchema, db: Session = Depends(get_db)):
-   pagamento = db.query(PagamentosModel).filter(PagamentosModel.id == id).first()
+   pagamento = db.query(PagamentosModel).filter(PagamentosModel.id_pagamento == id).first()
 
    if not pagamento: 
        raise HTTPException(
@@ -46,7 +46,7 @@ async def atualizar_pagamento(id: int, dados: PagamentoSchema, db: Session = Dep
 
 @viagens.delete("/{id}")
 async def deletar_pagamento(id: int, db:Session= Depends(get_db)):
-    pagamento = db.query(PagamentosModel).filter(PagamentosModel.id == id).first()
+    pagamento = db.query(PagamentosModel).filter(PagamentosModel.id_pagamento == id).first()
 
     if not pagamento:
         raise HTTPException(

@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
 
-class CorridaMOdel(BaseModel):
+class CorridaSchema(BaseModel):
     id_passgeiro: int
     id_motorista: int
     id_servico: int
@@ -13,3 +13,9 @@ class CorridaMOdel(BaseModel):
     local_destino: str
     valor: float
     status: str
+
+class CorridaResponse(CorridaSchema):
+    id_corrida: int
+
+    class Config:
+        from_attributes = True

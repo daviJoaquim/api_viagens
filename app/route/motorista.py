@@ -28,7 +28,7 @@ def buscar(id: int, db: Session = Depends(get_db)):
 
 @viagens.put("/{id}", response_model=MotoristaResponse)
 async def atualizar_motorista(id: int, dados: MotoristaSchema, db: Session = Depends(get_db)):
-   motorista = db.query(MotoristaModel).filter(MotoristaModel.id == id).first()
+   motorista = db.query(MotoristaModel).filter(MotoristaModel.id_motorista == id).first()
 
    if not motorista: 
        raise HTTPException(
@@ -46,7 +46,7 @@ async def atualizar_motorista(id: int, dados: MotoristaSchema, db: Session = Dep
 
 @viagens.delete("/{id}")
 async def deletar_motorista(id: int, db:Session= Depends(get_db)):
-    motorista = db.query(MotoristaModel).filter(MotoristaModel.id == id).first()
+    motorista = db.query(MotoristaModel).filter(MotoristaModel.id_motorista == id).first()
 
     if not motorista:
         raise HTTPException(

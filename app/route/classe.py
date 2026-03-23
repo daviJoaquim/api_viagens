@@ -28,7 +28,7 @@ def buscar(id: int, db: Session = Depends(get_db)):
 
 @viagens.put("/{id}", response_model=ClasseResponse)
 async def atualizar_classe(id: int, dados: ClasseSchema, db: Session = Depends(get_db)):
-   classe = db.query(ClasseModel).filter(ClasseModel.id == id).first()
+   classe = db.query(ClasseModel).filter(ClasseModel.id_classe == id).first()
 
    if not classe: 
        raise HTTPException(
@@ -46,7 +46,7 @@ async def atualizar_classe(id: int, dados: ClasseSchema, db: Session = Depends(g
 
 @viagens.delete("/{id}")
 async def deletar_classe(id: int, db:Session= Depends(get_db)):
-    classe = db.query(ClasseModel).filter(ClasseModel.id == id).first()
+    classe = db.query(ClasseModel).filter(ClasseModel.id_classe == id).first()
 
     if not classe:
         raise HTTPException(

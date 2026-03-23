@@ -1,10 +1,10 @@
 from pydantic import BaseModel
 
-class TipoCombustivelModel(BaseModel):
+class TipoCombustivelSchema(BaseModel):
     descricao: str
     fator_carbono: float
 
-class TipoCombustivelResponse(TipoCombustivelModel):
+class TipoCombustivelResponse(TipoCombustivelSchema):
     id_tipo_combustivel : int
 
     class Config :

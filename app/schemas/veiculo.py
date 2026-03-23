@@ -1,12 +1,12 @@
 from pydantic import BaseModel
 
-class VeiculoModel(BaseModel):
+class VeiculoSchema(BaseModel):
     placa: str
     id_modelo_veiculo : int
     tem_seguro : int
     id_classe_veiculo: int
 
-class VeiculoResponse(VeiculoModel):
+class VeiculoResponse(VeiculoSchema):
     id_veiculo: int
 
     class Config:

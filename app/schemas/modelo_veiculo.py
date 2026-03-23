@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-class ModeloVeiculoModel(BaseModel):
+class ModeloVeiculoSchema(BaseModel):
     nome_modelo: str
     fabricante: str
     cor: str
@@ -9,7 +9,7 @@ class ModeloVeiculoModel(BaseModel):
     propriedade: str
     id_tipo_combustivel: int
 
-class ModeloVeiculoResponse(ModeloVeiculoModel):
+class ModeloVeiculoResponse(ModeloVeiculoSchema):
     id_modelo_veiculo: int
 
     class Config:

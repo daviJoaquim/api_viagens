@@ -28,7 +28,7 @@ def buscar(id: int, db: Session = Depends(get_db)):
 
 @viagens.put("/{id}", response_model=ServicoResponse)
 async def atualizar_servico(id: int, dados: ServicoSchema, db: Session = Depends(get_db)):
-   servico = db.query(ServicoModel).filter(ServicoModel.id == id).first()
+   servico = db.query(ServicoModel).filter(ServicoModel.id_servico == id).first()
 
    if not servico: 
        raise HTTPException(
@@ -46,7 +46,7 @@ async def atualizar_servico(id: int, dados: ServicoSchema, db: Session = Depends
 
 @viagens.delete("/{id}")
 async def deletar_servico(id: int, db:Session= Depends(get_db)):
-    servico = db.query(ServicoModel).filter(ServicoModel.id == id).first()
+    servico = db.query(ServicoModel).filter(ServicoModel.id_servico == id).first()
 
     if not servico:
         raise HTTPException(

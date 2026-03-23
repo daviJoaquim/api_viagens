@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, text
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.orm import sessionmaker, DeclarativeBase
 from os import getenv
 from dotenv import load_dotenv
 
@@ -43,7 +43,8 @@ SessionLocal = sessionmaker(
 # 4. BASE PARA CRIAÇÃO DOS MODELOS (ORM)
 # ---------------------------------------------------------
 # Todas as tabelas do projeto irão herdar dessa base
-Base = declarative_base()
+class Base(DeclarativeBase):
+    pass
 
 # ---------------------------------------------------------
 # 5. DEPENDÊNCIA DE BANCO DE DADOS (FASTAPI)
