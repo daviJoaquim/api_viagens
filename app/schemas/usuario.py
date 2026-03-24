@@ -7,10 +7,7 @@ class UsuarioSchema(BaseModel):
     data_nascimento: date
     email: str
     usuario: str
-
-class UsuarioCreate(UsuarioSchema):
     senha: str
-
 
 class UsuarioResponse(UsuarioSchema):
     id: int

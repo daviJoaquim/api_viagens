@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Optional
 
 class CorridaSchema(BaseModel):
-    id_passgeiro: int
+    id_passageiro: int
     id_motorista: int
     id_servico: int
     id_avaliacao: Optional[float]

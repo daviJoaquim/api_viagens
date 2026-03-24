@@ -8,6 +8,6 @@ class UsuarioModel(Base):
     nome = Column(String(100), nullable=False)
     cpf = Column(String(11))
     data_nascimento = Column(Date)
-    senha = Column(String(64), nullable=False)
+    senha = Column(String(64), nullable=True)
     email = Column(String(64), unique=True, nullable=False)
     usuario = Column(String(50), unique=True, nullable=False)

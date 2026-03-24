@@ -4,7 +4,7 @@ from app.database import get_db
 from app.models.metodo_pagamento import MetodoPagamentoModel
 from app.schemas.metodo_pagamento import MetodoPagamentoSchema, MetodoPagamentoResponse
 
-metodo_pagamento = APIRouter(prefix="/corrida",tags=["Método Pagamento"])
+metodo_pagamento = APIRouter(prefix="/metodo_pagamento",tags=["Método Pagamento"])
 
 @metodo_pagamento.post("/", response_model=MetodoPagamentoSchema)
 async def criar_metodo_pagamento(dados: MetodoPagamentoSchema, db: Session = Depends(get_db)):
@@ -46,4 +46,4 @@ async def apagar_avaliacao(id_metodo_pagamento: int, db: Session = Depends(get_d
     
     db.delete(metodo_pagamento)
     db.commit()
-    return {"message": "Avaliação removida com sucesso"}
+    return {"message": "Método Pagamento removida com sucesso"}

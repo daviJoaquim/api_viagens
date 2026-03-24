@@ -6,28 +6,28 @@ from app.schemas.usuario import UsuarioSchema, UsuarioResponse
 
 usuario = APIRouter(prefix="/usuario",tags=["Usuário"])
 
-@usuario.post("/", response_model=UsuarioSchema)
+@usuario.post("/", response_model=UsuarioResponse)
 async def criar_usuario(dados: UsuarioSchema, db: Session = Depends(get_db)):
-    criar_usuario = UsuarioModel(**dados.model_dump())
-    db.add(criar_usuario)
+    usuario = UsuarioModel(**dados.model_dump())
+    db.add(usuario)
     db.commit()
-    db.refresh(criar_usuario)
-    return criar_usuario
+    db.refresh(usuario)
+    return usuario
 
 @usuario.get("/")
 async def listar_usuario(db: Session = Depends(get_db)):
     return db.query(UsuarioModel).all()
 
 @usuario.get("/{id}")
-async def buscar_avaliacao(id_usuario: int, db: Session = Depends(get_db)):
-    usuario = db.query(UsuarioModel).filter(UsuarioModel.id == id_usuario).first()
+async def buscar_avaliacao(id: int, db: Session = Depends(get_db)):
+    usuario = db.query(UsuarioModel).filter(UsuarioModel.id == id).first()
     if not usuario:
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
     return usuario
 
 @usuario.put("/{id}")
-async def atualizar_usuario(id_avaliacao: int, dados: UsuarioResponse, db: Session = Depends(get_db)):
-    usuario = db.query(UsuarioModel).filter(UsuarioModel.id == id_avaliacao).first()
+async def atualizar_usuario(id: int, dados: UsuarioResponse, db: Session = Depends(get_db)):
+    usuario = db.query(UsuarioModel).filter(UsuarioModel.id == id).first()
     if not usuario:
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
     
@@ -39,8 +39,8 @@ async def atualizar_usuario(id_avaliacao: int, dados: UsuarioResponse, db: Sessi
     return usuario
 
 @usuario.delete("/{id}")
-async def apagar_usuario(id_usuario: int, db: Session = Depends(get_db)):
-    usuario = db.query(UsuarioModel).filter(UsuarioModel.id == id_usuario).first()
+async def apagar_usuario(id: int, db: Session = Depends(get_db)):
+    usuario = db.query(UsuarioModel).filter(UsuarioModel.id == id).first()
     if not usuario:
         raise HTTPException(status_code=404, detail="Usuário não encontrada")
     

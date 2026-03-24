@@ -23,6 +23,7 @@ from app.database import Base, engine
 #Criar todas as entidades no banco de dados
 #Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(bind=engine)
+
 app = FastAPI()
 
 app.include_router(rota_usuario)

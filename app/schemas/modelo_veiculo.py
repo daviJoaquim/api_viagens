@@ -2,7 +2,6 @@ from pydantic import BaseModel
 
 class ModeloVeiculoSchema(BaseModel):
     modelo: str
-    marca: str
     cor: str
     ano: int
     capacidade: int
