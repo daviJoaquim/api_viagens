@@ -1,23 +1,23 @@
 from fastapi import FastAPI
-from app.route.usuario import viagens as rota_usuario
+from app.route.usuario import usuario as rota_usuario
 
-from app.route.tipo_combustivel import viagens as rota_tipo_combustivel
-from app.route.classe import viagens as rota_classe
-from app.route.metodo_pagamento import viagens as rota_metodo_pagamentos
-from app.route.servico import viagens as rota_servico
+from app.route.tipo_combustivel import tipo_combustivel as rota_tipo_combustivel
+from app.route.classe import classe as rota_classe
+from app.route.metodo_pagamento import metodo_pagamento as rota_metodo_pagamentos
+from app.route.servico import servico as rota_servico
 
-from app.route.modelo_veiculo import viagens as rota_modelo_veiculo
+from app.route.modelo_veiculo import modelo_veiculo as rota_modelo_veiculo
 
-from app.route.passageiro import viagens as rota_passageiro
-from app.route.motorista import viagens as rota_motorista
+from app.route.passageiro import passageiro as rota_passageiro
+from app.route.motorista import motorista as rota_motorista
 
-from app.route.veiculo import viagens as rota_veiculo
-from app.route.motorista_veiculo import viagens as rota_motorista_veiculo
+from app.route.veiculo import veiculo as rota_veiculo
+from app.route.motorista_veiculo import motorista_veiculo as rota_motorista_veiculo
 
-from app.route.corrida import viagens as rota_corrida
+from app.route.corrida import corrida as rota_corrida
 
-from app.route.pagamentos import viagens as rota_pagamentos
-from app.route.avaliacao import viagens as rota_avaliacao
+from app.route.pagamentos import pagamentos as rota_pagamentos
+from app.route.avaliacao import avaliacao as rota_avaliacao
 from app.database import Base, engine
 
 #Criar todas as entidades no banco de dados

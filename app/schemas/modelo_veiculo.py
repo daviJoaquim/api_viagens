@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 
 class ModeloVeiculoSchema(BaseModel):
-    nome_modelo: str
-    fabricante: str
+    modelo: str
+    marca: str
     cor: str
     ano: int
     capacidade: int

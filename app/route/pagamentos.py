@@ -1,62 +1,49 @@
-from fastapi import APIRouter, Depends, HTTPException, status 
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.pagamentos import PagamentosModel
-from app.schemas.pagamentos import PagamentoResponse, PagamentoSchema
+from app.schemas.pagamentos import PagamentoSchema, PagamentoResponse
 
-viagens = APIRouter(prefix="/pagamento", tags=["pagamento"])
+pagamentos = APIRouter(prefix="/pagamentos", tags=["Pagamentos"])
 
-@viagens.post("/", response_model= PagamentoResponse)
-async def criar_pagamento(dados: PagamentoSchema, db: Session = Depends(get_db)):
+@pagamentos.post("/", response_model=PagamentoSchema)
+async def criar_pagamentos(dados: PagamentoSchema, db: Session = Depends(get_db)):
+    criar_pagamentos = PagamentosModel(**dados.model_dump())
+    db.add(criar_pagamentos)
+    db.commit()
+    db.refresh(criar_pagamentos)
+    return criar_pagamentos
 
-    criar_pagamento = PagamentosModel(**dados.model_dump())
-    db.add(criar_pagamento)
-    db.commit() 
-    db.refresh(criar_pagamento)
-    return criar_pagamento
-
-@viagens.get("/", response_model=list[PagamentoResponse])
-async def listar_pagamento(db:Session = Depends(get_db)):
+@pagamentos.get("/")
+async def listar_pagamentos(db: Session = Depends(get_db)):
     return db.query(PagamentosModel).all()
 
-@viagens.get("/{id}", response_model=PagamentoResponse)
-def buscar(id: int, db: Session = Depends(get_db)):
-    pagamento = db.query(PagamentosModel).filter(PagamentosModel.id_pagamento == id).first()
-    if not pagamento:
-        raise HTTPException(404, "Não encontrado")
-    return pagamento
+@pagamentos.get("/{id}")
+async def buscar_pagamentos(id_pagamentos: int, db: Session = Depends(get_db)):
+    pagamentos = db.query(PagamentosModel).filter(PagamentosModel.id_pagamento == id_pagamentos).first()
+    if not pagamentos:
+        raise HTTPException(status_code=404, detail="Pagamentos não encontrados")
+    return pagamentos
 
-@viagens.put("/{id}", response_model=PagamentoResponse)
-async def atualizar_pagamento(id: int, dados: PagamentoSchema, db: Session = Depends(get_db)):
-   pagamento = db.query(PagamentosModel).filter(PagamentosModel.id_pagamento == id).first()
-
-   if not pagamento: 
-       raise HTTPException(
-            status_code = status.HTTP_404_NOT_FOUND,
-            detail = f"Pagamento com ID {id} não encontrada"
-        )
-   
-   for campo, valor in dados.model_dump().items():
-       setattr(pagamento, campo, valor)
-
-   db.commit()
-   db.refresh(pagamento)
-
-   return pagamento
-
-@viagens.delete("/{id}")
-async def deletar_pagamento(id: int, db:Session= Depends(get_db)):
-    pagamento = db.query(PagamentosModel).filter(PagamentosModel.id_pagamento == id).first()
-
-    if not pagamento:
-        raise HTTPException(
-            status.HTTP_404_NOT_FOUND,
-            detail=f"O pagamento com ID {id} não foi encontrada"
-        )
-
-        
-    db.delete(pagamento)
+@pagamentos.put("/{id}")
+async def atualizar_pagamentos(id_pagamentos: int, dados: PagamentoResponse, db: Session = Depends(get_db)):
+    pagamentos = db.query(PagamentosModel).filter(PagamentosModel.id_pagamento == id_pagamentos).first()
+    if not pagamentos:
+        raise HTTPException(status_code=404, detail="Pagamentos não encontrados")
+    
+    for chave, valor in dados.model_dump(exclude_unset=True).items():
+        setattr(pagamentos, chave, valor)
+    
     db.commit()
-    return("Deletado com sucesso!")
+    db.refresh(pagamentos)
+    return pagamentos
 
-
+@pagamentos.delete("/{id}")
+async def apagar_avaliacao(id_pagamentos: int, db: Session = Depends(get_db)):
+    pagamentos = db.query(PagamentosModel).filter(PagamentosModel.id_pagamento == id_pagamentos).first()
+    if not pagamentos:
+        raise HTTPException(status_code=404, detail="Pagamentos não encontrados")
+    
+    db.delete(pagamentos)
+    db.commit()
+    return {"message": "Pagamentos removido com sucesso"}

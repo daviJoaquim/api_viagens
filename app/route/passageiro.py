@@ -1,62 +1,49 @@
-from fastapi import APIRouter, Depends, HTTPException, status 
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.passageiro import PassageiroModel
-from app.schemas.passageiro import PassageiroResponse, PassageiroSchema
+from app.schemas.passageiro import PassageiroSchema, PassageiroResponse
 
-viagens = APIRouter(prefix="/passageiro", tags=["passageiro"])
+passageiro = APIRouter(prefix="/passageiro",tags=["Passageiro"])
 
-@viagens.post("/", response_model= PassageiroResponse)
+@passageiro.post("/", response_model=PassageiroSchema)
 async def criar_passageiro(dados: PassageiroSchema, db: Session = Depends(get_db)):
-
     criar_passageiro = PassageiroModel(**dados.model_dump())
     db.add(criar_passageiro)
-    db.commit() 
+    db.commit()
     db.refresh(criar_passageiro)
     return criar_passageiro
 
-@viagens.get("/", response_model=list[PassageiroResponse])
-async def listar_passageiro(db:Session = Depends(get_db)):
+@passageiro.get("/")
+async def listar_passageiro(db: Session = Depends(get_db)):
     return db.query(PassageiroModel).all()
 
-@viagens.get("/{id}", response_model=PassageiroResponse)
-def buscar(id: int, db: Session = Depends(get_db)):
-    passageiro = db.query(PassageiroModel).filter(PassageiroModel.id_passageiro == id).first()
+@passageiro.get("/{id}")
+async def buscar_passageiro(id_passageiro: int, db: Session = Depends(get_db)):
+    passageiro = db.query(PassageiroModel).filter(PassageiroModel.id_passageiro == id_passageiro).first()
     if not passageiro:
-        raise HTTPException(404, "Não encontrado")
+        raise HTTPException(status_code=404, detail="Passageiro não encontrado")
     return passageiro
 
-@viagens.put("/{id}", response_model=PassageiroResponse)
-async def atualizar_passageiro(id: int, dados: PassageiroSchema, db: Session = Depends(get_db)):
-   passageiro = db.query(PassageiroModel).filter(PassageiroModel.id_passageiro == id).first()
-
-   if not passageiro: 
-       raise HTTPException(
-            status_code = status.HTTP_404_NOT_FOUND,
-            detail = f"Passageiro com ID {id} não encontrada"
-        )
-   
-   for campo, valor in dados.model_dump().items():
-       setattr(passageiro, campo, valor)
-
-   db.commit()
-   db.refresh(passageiro)
-
-   return passageiro
-
-@viagens.delete("/{id}")
-async def deletar_passageiro(id: int, db:Session= Depends(get_db)):
-    passageiro = db.query(PassageiroModel).filter(PassageiroModel.id_passageiro == id).first()
-
+@passageiro.put("/{id}")
+async def atualizar_passageiro(id_passageiro: int, dados: PassageiroResponse, db: Session = Depends(get_db)):
+    passageiro = db.query(PassageiroModel).filter(PassageiroModel.id_passageiro == id_passageiro).first()
     if not passageiro:
-        raise HTTPException(
-            status.HTTP_404_NOT_FOUND,
-            detail=f"O passageiro com ID {id} não foi encontrada"
-        )
+        raise HTTPException(status_code=404, detail="Passageiro não encontrado")
+    
+    for chave, valor in dados.model_dump(exclude_unset=True).items():
+        setattr(passageiro, chave, valor)
+    
+    db.commit()
+    db.refresh(passageiro)
+    return passageiro
 
-        
+@passageiro.delete("/{id}")
+async def apagar_passageiro(id_passageiro: int, db: Session = Depends(get_db)):
+    passageiro = db.query(PassageiroModel).filter(PassageiroModel.id_passageiro == id_passageiro).first()
+    if not passageiro:
+        raise HTTPException(status_code=404, detail="Passageiro não encontrado")
+    
     db.delete(passageiro)
     db.commit()
-    return("Deletado com sucesso!")
-
-
+    return {"message": "Passageiro removida com sucesso"}

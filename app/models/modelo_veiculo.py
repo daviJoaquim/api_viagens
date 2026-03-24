@@ -7,7 +7,7 @@ class ModeloVeiculoModel(Base):
     id_modelo_veiculo = Column(Integer, primary_key=True, autoincrement=True)
     id_veiculo = Column(Integer, ForeignKey("veiculo.id_veiculo"))
     id_motorista = Column(Integer, ForeignKey("motorista.id_motorista"), nullable=False)
-    id_tipo_combustivel = Column(Integer, ForeignKey("tipo_combustivel.id_combustivel"), nullable=False)
+    id_tipo_combustivel = Column(Integer, ForeignKey("tipo_combustivel.id_tipo_combustivel"), nullable=False)
     modelo = Column(String(100), nullable=False)
     marca = Column(String(100), nullable=False)
     placa = Column(String(10), nullable=False)

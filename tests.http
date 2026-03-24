@@ -49,17 +49,40 @@ POST {{base_url}}/modelo_veiculo
 Content-Type: application/json
 
 {
+  "id_modelo_veiculo": 1,
+  "id_veiculo": 1,
+  "id_motorista": 1,
+  "id_tipo_combustivel": 1,
   "modelo": "Onix",
   "marca": "Chevrolet",
+  "placa": "ABC5627",
   "cor": "Cinza",
   "ano": 2023,
-  "capacidade": 5,
   "propriedade": "Proprio",
-  "id_tipo_combustivel": 1,
-  "placa": 5627,
-  "id_motorista": 1,
-  "id_veiculo": 1,
-  "id_modelo_veiculo": 1
+  "capacidade": 5
 
 }
+
+### CLASSE VEICULO
+POST {{base_url}}/classe
+Content-Type: application/json
+
+{
+  "nome_classe": "Uber Comfort",
+  "fator_preco": 1.0
+}
+###
+
+### VEICULO
+POST {{base_url}}/veiculo
+Content-Type: application/json
+
+{
+    "id_veiculo": 1, 
+    "id_modelo_veiculo": 1,  
+    "tem_seguro": true,
+    "id_classe": 1,
+    "placa":  "ABC3454"
+}
+###
 

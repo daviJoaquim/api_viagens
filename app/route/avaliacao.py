@@ -1,62 +1,49 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.avaliacao import AvaliacaoModel
-from app.schemas.avaliacao import AvaliacaoResponse, AvaliacaoSchema
+from app.schemas.avaliacao import AvaliacaoSchema, AvaliacaoResponse
 
-viagens = APIRouter(prefix="/avaliacao", tags=["avaliacao"])
+avaliacao = APIRouter(prefix="/avaliação", tags=["Avaliação"])
 
-@viagens.post("/", response_model= AvaliacaoResponse)
+@avaliacao.post("/", response_model=AvaliacaoSchema)
 async def criar_avaliacao(dados: AvaliacaoSchema, db: Session = Depends(get_db)):
-
     criar_avaliacao = AvaliacaoModel(**dados.model_dump())
     db.add(criar_avaliacao)
     db.commit()
     db.refresh(criar_avaliacao)
     return criar_avaliacao
 
-@viagens.get("/", response_model=list[AvaliacaoResponse])
-async def listar_avaliacao(db:Session = Depends(get_db)):
+@avaliacao.get("/")
+async def listar_avaliacoes(db: Session = Depends(get_db)):
     return db.query(AvaliacaoModel).all()
 
-@viagens.get("/{id}", response_model=AvaliacaoResponse)
-def buscar(id: int, db: Session = Depends(get_db)):
-    avaliacao = db.query(AvaliacaoModel).filter(AvaliacaoModel.id_avaliacao == id).first()
-    if not avaliacao:
-        raise HTTPException(404, "Não encontrado")
-    return avaliacao
+@avaliacao.get("/{id}")
+async def buscar_avaliacao(id_avaliacao: int, db: Session = Depends(get_db)):
+    res = db.query(AvaliacaoModel).filter(AvaliacaoModel.id_avaliacao == id_avaliacao).first()
+    if not res:
+        raise HTTPException(status_code=404, detail="Avaliação não encontrada")
+    return res
 
-@viagens.put("/{id}", response_model=AvaliacaoResponse)
-async def atualizar_avaliacao(id: int, dados: AvaliacaoSchema, db: Session = Depends(get_db)):
-   avaliacao = db.query(AvaliacaoModel).filter(AvaliacaoModel.id_avaliacao == id).first()
-
-   if not avaliacao: 
-       raise HTTPException(
-            status_code = status.HTTP_404_NOT_FOUND,
-            detail = f"Avaliação com ID {id} não encontrada"
-        )
-   
-   for campo, valor in dados.model_dump().items():
-       setattr(avaliacao, campo, valor)
-
-   db.commit()
-   db.refresh(avaliacao)
-
-   return avaliacao
-
-@viagens.delete("/{id}")
-async def deletar_avaliacao(id: int, db:Session= Depends(get_db)):
-    avaliacao = db.query(AvaliacaoModel).filter(AvaliacaoModel.id_avaliacao == id).first()
-
-    if not avaliacao:
-        raise HTTPException(
-            status.HTTP_404_NOT_FOUND,
-            detail=f"O avaliação com ID {id} não foi encontrada"
-        )
-
-        
-    db.delete(avaliacao)
+@avaliacao.put("/{id}")
+async def atualizar_avaliacao(id_avaliacao: int, dados: AvaliacaoResponse, db: Session = Depends(get_db)):
+    item_db = db.query(AvaliacaoModel).filter(AvaliacaoModel.id_avaliacao == id_avaliacao).first()
+    if not item_db:
+        raise HTTPException(status_code=404, detail="Avaliação não encontrada")
+    
+    for chave, valor in dados.model_dump(exclude_unset=True).items():
+        setattr(item_db, chave, valor)
+    
     db.commit()
-    return("Deletado com sucesso!")
+    db.refresh(item_db)
+    return item_db
 
-
+@avaliacao.delete("/{id}")
+async def apagar_avaliacao(id_avaliacao: int, db: Session = Depends(get_db)):
+    item_db = db.query(AvaliacaoModel).filter(AvaliacaoModel.id_avaliacao == id_avaliacao).first()
+    if not item_db:
+        raise HTTPException(status_code=404, detail="Avaliação não encontrada")
+    
+    db.delete(item_db)
+    db.commit()
+    return {"message": "Avaliação removida com sucesso"}
